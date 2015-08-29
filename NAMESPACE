@@ -1,0 +1,7 @@
+export(pnea)
+S3method(plot, pneac)
+S3method(print, pneac)
+S3method(summary, pneac)
+importFrom("graphics", "abline", "hist", "legend", "par", "plot")
+importFrom("stats", "ecdf", "ks.test", "phyper")
+importFrom("utils", "head")
