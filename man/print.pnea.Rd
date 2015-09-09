@@ -1,24 +1,23 @@
-\name{plot.pneac}
-\alias{plot.pneac}
+\name{print.pnea}
+\alias{print.pnea}
 \title{
-Plot method of \code{pnea}
+Print method of \code{pnea}
 }
 \description{
-Histogram and p-p plot of p-values for class "\code{pneac}".
+\code{print} method for class "\code{pnea}"
 }
 \usage{
-\method{plot}{pneac}(x, nbreaks = 10, ...)
+\method{print}{pnea}(x, nrows=10, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{An object of class "\code{pneac}"}
-  \item{nbreaks}{Number of breaks to be used for the histogram (default is 10)}
+  \item{x}{An object of class "\code{pnea}"}
+  \item{nrows}{Maximum number of results to print (default is 10). It can be either an integer number or "ALL"}
   \item{\dots}{Further arguments passed to or from other methods}
 }
-\value{
-An histogram showing the distribution of p-values and a p-p plot comparing the distribution of p-values to the uniform distribution.}
+\value{A dataframe showing the first \code{nrows} tests contained in a \code{pnea} object}
 \author{Mirko Signorelli}
-\seealso{\code{\link{pnea}}, \code{\link{print.pneac}}, \code{\link{summary.pneac}}}
+\seealso{\code{\link{plot.pnea}}, \code{\link{pnea}}, \code{\link{summary.pnea}}}
 \examples{
 A = matrix(0, nrow=7, ncol=7)
 A[1,c(2,3)]=1; A[2,c(5,7)]=1;A[3,c(1,4)]=1;A[4,c(2,5,7)]=1;A[6,c(2,5)]=1;A[7,4]=1
@@ -31,6 +30,7 @@ agslist = list('set 1' = set1, 'set 2' = set2)
 fgslist = list('set 3' = set3)
 
 test = pnea(agslist, fgslist, network=A, nodes=labels, alpha=0.05)
-plot(test)
+print(test)
+
 }
 \keyword{methods}
