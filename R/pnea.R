@@ -44,6 +44,7 @@ pnea = function(agslist, fgslist = NULL, network, nodes, alpha = NULL, agsnames 
   }
   # NB: from this point on, 'net' is the network matrix to be used!!!
   if (is.null(alpha) == FALSE) {if ( alpha<=0 | alpha>=1 ) stop('alpha must be in (0,1)')}
+  if (is.factor(nodes) == T) {nodes = as.character(nodes)}
   oa = numeric()
   i_f = numeric()
   agslogic = vector("list", length(agslist)) 
@@ -51,12 +52,14 @@ pnea = function(agslist, fgslist = NULL, network, nodes, alpha = NULL, agsnames 
   fgslogic = vector("list", length(fgslist))
   naf = numeric()
   p = naf
+  expect = naf
   o = vector()
   concl = o
   from = o
   to = o
   if ( is.null( names(agslist) ) ) names(agslist) = agsnames
   for (i in 1:length(agslist)) {
+    if (is.factor(agslist[[i]]) == T) {agslist[[i]] = as.character(agslist[[i]])}
     agslogic[[i]] = (net[,1] %in% agslist[[i]])
     oa[i] = sum(agslogic[[i]])
     netred[[i]] = net[agslogic[[i]],]
@@ -65,6 +68,7 @@ pnea = function(agslist, fgslist = NULL, network, nodes, alpha = NULL, agsnames 
   if (is.null(fgslist) == FALSE) {
     if ( is.null( names(fgslist) ) ) names(fgslist) = fgsnames
     for (i in 1:length(fgslist)) {
+      if (is.factor(fgslist[[i]]) == T) {fgslist[[i]] = as.character(fgslist[[i]])}
       fgslogic[[i]] = (net[,2] %in% fgslist[[i]])
       i_f[i] = sum(fgslogic[[i]])
     }
@@ -77,6 +81,7 @@ pnea = function(agslist, fgslist = NULL, network, nodes, alpha = NULL, agsnames 
         naf[k] = sum( netred[[i]][,2] %in%  fgslist[[j]])
         temp = pvalue(naf[k], nout = nout, oa = oa[i], i_f[j])
         p[k] = temp$p
+        expect[k] = round(i_f[j] * oa[i] / nout, 4)
         o[k] = temp$overenr
         if (is.null(alpha) == FALSE) {
           if (p[k] > alpha) concl[k] = 'No enrichment'
@@ -102,6 +107,7 @@ pnea = function(agslist, fgslist = NULL, network, nodes, alpha = NULL, agsnames 
         naf[k] = sum( netred[[i]][,2] %in%  agslist[[j]])
         temp = pvalue(naf[k], nout = nout, oa = oa[i], i_f[j])
         p[k] = temp$p
+        expect[k] = round(i_f[j] * oa[i] / nout, 4)
         o[k] = temp$overenr
         if (is.null(alpha) == FALSE) {
           if (p[k] > alpha) concl[k] = 'No enrichment'
@@ -114,20 +120,18 @@ pnea = function(agslist, fgslist = NULL, network, nodes, alpha = NULL, agsnames 
   }
   # final common code
   if (is.null(alpha) == FALSE) {
-    results = data.frame(from, to, naf, p, concl)
-    names(results) = c('AGS', 'FGS', 'naf', 'pvalue', 'conclusion')
+    results = data.frame(from, to, naf, expect, p, concl)
+    names(results) = c('AGS', 'FGS', 'naf', 'expected_naf', 'pvalue', 'conclusion')
   }
   else {
-    results = data.frame(from, to, naf, p)
-    names(results) = c('AGS', 'FGS', 'naf', 'pvalue')
+    results = data.frame(from, to, naf, expect, p)
+    names(results) = c('AGS', 'FGS', 'naf', 'expected_naf', 'pvalue')
   }
   class(results)=c('pnea','data.frame')
   results
 }
 
 summary.pnea = function(object, ...) {
-  cat("Number of AGSs tested:",length(unique(object$AGS)),"\n")
-  cat("Number of FGSs tested:",length(unique(object$FGS)),"\n")
   cat("Number of comparisons:",dim(object)[1],"\n")
   cat("Enrichments at 1% level:",sum(object$pvalue<0.01),"\n")
   cat("Enrichments at 5% level:",sum(object$pvalue<0.05),"\n")

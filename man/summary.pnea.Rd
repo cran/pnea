@@ -16,9 +16,7 @@ Summary method of \code{pnea}
 \value{
 The \code{summary.pnea} function returns the following values:
 \itemize{
-\item the number of different altered gene sets (AGS) tested;
-\item the number of different functional gene sets (FGS) tested;
-\item the total number of comparisons;
+\item the number of tests computed;
 \item the number of enrichments at 1\% and 5\% level;
 \item the p-value of the Kolmogorov-Smirnov test to check if the distribution of p-values is uniform.
 }

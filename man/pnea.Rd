@@ -10,8 +10,8 @@ pnea(agslist, fgslist, network, nodes, alpha=NULL, agsnames, fgsnames)
 }
 \arguments{
   \item{agslist}{A list of altered gene sets (AGSs). Each element of the list is an AGS and must be represented as a vector of genes}
-  \item{fgslist}{A list of functional gene sets (FGSs). Each element of the list is a FGS and must be represented as a vector of genes. This argument is optional: if provided, every set of \code{fgslist} is compared with every set of \code{agslist}; if \code{NULL}, the function compares sets in \code{agslist} between themselves (assuming that \code{network} is directed)}
-  \item{network}{It can be one of the following objects: an adjacency matrix (see 'Example 1'), an \code{igraph} object (see 'Example 2') or a two-column matrix where elements in the first column are parent nodes and in the second child nodes (see 'Example 3').}
+  \item{fgslist}{A list of functional gene sets (FGSs). Each element of the list is a FGS and must be represented as a vector of genes. This argument is optional: if provided, every set of \code{fgslist} is compared with every set of \code{agslist}; if \code{NULL}, the function compares sets in \code{agslist} between themselves (assuming that \code{network} is undirected)}
+  \item{network}{It can be one of the following objects: an adjacency matrix (see 'Example 1'), an \code{igraph} object (see 'Example 2') or a two-column matrix where elements in the first column are parent nodes and in the second child nodes (see 'Example 3')}
   \item{nodes}{Vector containing the names of all nodes that form the network}
   \item{alpha}{Significance level of the test (optional). If specified, a column with the conclusion of the test is added to the output}
   \item{agsnames}{A vector of names for the AGSs (optional). It has to be provided only if the elements of agslist are not named}
@@ -20,7 +20,8 @@ pnea(agslist, fgslist, network, nodes, alpha=NULL, agsnames, fgsnames)
 \value{A data frame with the following columns:
 \item{AGS}{altered gene set}
 \item{FGS}{functional gene set}
-\item{naf}{number of links from AGS to FGS}
+\item{naf}{observed number of links from AGS to FGS}
+\item{expected_naf}{expected number of links from AGS to FGS (in absence of enrichment)}
 \item{pvalue}{p-value of the test}
 \item{conclusion}{conclusion of the test (only if \code{alpha} is specified): no enrichment, overenrichment or underenrichment}
 }
@@ -61,6 +62,9 @@ print(test2)
 networklist = matrix(nrow=12, ncol=2)
 networklist[,1]=c('a','a','b','b','c','c','d','d','d','f','f','g')
 networklist[,2]=c('b','c','e','g','a','d','b','e','g','b','e','d')
+# REMARK: note the different ways used to specify directed and undirected edges. 
+# Nodes 'a' and 'c' are connected by an undirected edge,
+# whereas nodes 'b' and 'e' are linked by a directed arrow from 'b' to 'e'
 
 labels = letters[1:7]
 set1 = c('a','e')
@@ -90,7 +94,7 @@ test2 = test[102:202,]
 print(test2)
 summary(test2)
 plot(test2, nbreaks=20)
-o2=test1[test1$conclusion=='Overenrichment',]
+o2=test2[test2$conclusion=='Overenrichment',]
 print(o2, nrows='ALL') #display overenrichments
 }}
 \keyword{htest}

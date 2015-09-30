@@ -1,12 +1,12 @@
-d7b770952ac41b4e18fe52bb0bcde0ff *DESCRIPTION
+9cf677a30cacfa77b162b4540a8c28b3 *DESCRIPTION
 8bc7d5131d76337c3719b51fd8aef1d3 *NAMESPACE
-2704fa9ee3b1f09983c161dbc8e126a3 *R/pnea.R
-0fe5f6c88b345c650d3b7f50a2fca914 *build/partial.rdb
+2f20d1ad1d20b12587fb5cf2265c7a7b *R/pnea.R
+3c2be69b3c8b74753e784577f4294456 *build/partial.rdb
 735ed495e03346d2e71503123027fa22 *data/datalist
 3a6019c8a2eb2e823e5dc594e437228d *data/yeast.RData
 4d1c52df9b4f5417d1b59407b4ab7426 *man/plot.pnea.Rd
 ad6d7021994341cc5e3c7176059d9b8d *man/pnea-package.Rd
-38250fa04279361a25f6d6c1f196be47 *man/pnea.Rd
+918862b7e54c0b01fae8e14763ddd127 *man/pnea.Rd
 2a3ca5204e33f241e9a89b4b6d342319 *man/print.pnea.Rd
-e26a40d7b5f6c85a0d014af6d6cf2eb1 *man/summary.pnea.Rd
+f99ff434f4ca8bc40552952c47c722ff *man/summary.pnea.Rd
 dd8261ca06493877a16291e6d19ca343 *man/yeast.Rd
