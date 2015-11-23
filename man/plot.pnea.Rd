@@ -22,14 +22,11 @@ An histogram showing the distribution of p-values and a p-p plot comparing the d
 \examples{
 \dontrun{
 data(yeast)
-esr = list('ESR 1' = yeast$ags1, 'ESR 2' = yeast$ags2)
-test = pnea(agslist = esr, fgslist = yeast$fgs, network = yeast$yeastnet,
-nodes = yeast$ynetgenes, alpha = 0.01)
+esr2 = list('ESR 2' = yeast$esr2)
 
-test1 = test[1:101,]
-plot(test1)
+test = pnea(alist = esr2, blist = yeast$goslimproc, network = yeast$yeastnet, 
+            nettype='undirected', nodes = yeast$ynetgenes, alpha = 0.01)
 
-test2 = test[102:202,]
-plot(test2, nbreaks=20)
+plot(test)
 }}
 \keyword{methods}

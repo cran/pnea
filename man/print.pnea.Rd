@@ -26,10 +26,10 @@ labels = letters[1:7]
 set1 = c('a','e')
 set2 = c('c','g')
 set3 = c('d','f')
-agslist = list('set 1' = set1, 'set 2' = set2)
-fgslist = list('set 3' = set3)
+alist = list('set 1' = set1, 'set 2' = set2)
+blist = list('set 3' = set3)
 
-test = pnea(agslist, fgslist, network=A, nodes=labels, alpha=0.05)
+test = pnea(alist, blist, network=A, nettype='directed', nodes=labels, alpha=0.05)
 print(test)
 
 }

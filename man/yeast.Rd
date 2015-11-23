@@ -11,11 +11,11 @@ List collecting various yeast data (see 'description')
 
 \code{ynetgenes}: vector with the names of the genes appearing in \code{yeastnet}
 
-\code{ags1}: vector containing the first of the two gene sets that constitute the "Environmental Stress Response" (ESR) reported by Gasch et al. (2012)
+\code{esr1}: vector containing the first of the two gene sets that constitute the "Environmental Stress Response" (ESR) reported by Gasch et al. (2012)
 
-\code{ags2}: vector containing the second gene set of the ESR
+\code{esr2}: vector containing the second gene set of the ESR
 
-\code{fgs}: list containing the gene sets of the GOslim process ontology (Ashburner et al., 200) for the buddying yeast Saccaromyces Cerevisiae
+\code{goslimproc}: list containing the gene sets of the GOslim process ontology (Ashburner et al., 200) for the buddying yeast Saccaromyces Cerevisiae (groups 'biological process' and 'other' are not included)
 }
 \format{
 \code{yeast}: list

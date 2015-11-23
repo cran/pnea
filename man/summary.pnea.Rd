@@ -26,17 +26,16 @@ The \code{summary.pnea} function returns the following values:
 \code{\link{pnea}}, \code{\link{plot.pnea}}, \code{\link{summary.pnea}}
 }
 \examples{
-# Ex. 4: ESR data
 \dontrun{
 data(yeast)
-esr = list('ESR 1' = yeast$ags1, 'ESR 2' = yeast$ags2)
-test = pnea(agslist = esr, fgslist = yeast$fgs, network = yeast$yeastnet,
-nodes = yeast$ynetgenes, alpha = 0.01)
+esr = list('ESR 1' = yeast$esr1, 'ESR 2' = yeast$esr2)
+test = pnea(alist = esr, blist = yeast$goslimproc, network = yeast$yeastnet,
+            nettype = 'undirected', nodes = yeast$ynetgenes, alpha = 0.01)
 
-test1 = test[1:101,]
+test1 = test[1:99,]
 summary(test1)
 
-test2 = test[102:202,]
+test2 = test[100:198,]
 summary(test2)
 }}
 \keyword{methods}
