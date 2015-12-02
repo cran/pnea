@@ -11,7 +11,7 @@ pnea(alist, blist = NULL, network, nettype, nodes, alpha = NULL,
 \arguments{
   \item{alist}{A list of A sets. Each element of the list is a gene set and must be represented as a vector of genes}
   \item{blist}{A list of B sets. Each element of the list is a gene set and must be represented as a vector of genes. If \code{nettype} is \code{"undirected"}, this argument is optional: if provided, every set of \code{blist} is compared with every set of \code{alist}; if \code{NULL}, the function compares sets in \code{alist} between themselves}
-  \item{network}{One of the following objects: an adjacency matrix (see 'Example 1'), an \code{igraph} object (see 'Example 2') or a two-column matrix where every row represents and edge (for directed networks, elements in the first column must be parent nodes, and elements in the second column child nodes)}
+  \item{network}{One of the following objects: an adjacency matrix of class "matrix" (see 'Example 1') or of class ""dgCMatrix"", an \code{igraph} object (see 'Example 2') or a two-column matrix where every row represents and edge (for directed networks, elements in the first column must be parent nodes, and elements in the second column child nodes)}
   \item{nettype}{Either \code{'directed'} or \code{'undirected'}}
   \item{nodes}{Vector containing the names of all nodes in the network}
   \item{alpha}{Significance level of the test (optional). If specified, a column with the conclusion of the test is added to the output}
@@ -88,16 +88,12 @@ test = pnea(alist = esr, blist = yeast$goslimproc, network = yeast$yeastnet,
             nettype = 'undirected', nodes = yeast$ynetgenes, alpha = 0.01)
 
 test1 = test[1:99,]
-print(test1)
-summary(test1)
-plot(test1)
+table(test1$conclusion)
 o1=test1[test1$conclusion=='Overenrichment',]
 print(o1, nrows='ALL') #display overenrichments
 
 test2 = test[100:198,]
-print(test2)
-summary(test2)
-plot(test2, nbreaks=20)
+table(test2$conclusion)
 o2=test2[test2$conclusion=='Overenrichment',]
 print(o2, nrows='ALL') #display overenrichments
 }}

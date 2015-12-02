@@ -52,6 +52,7 @@ pneac = function(x,...) UseMethod('pnea', x)
 pnea = function(alist, blist = NULL, network, nettype, nodes, alpha = NULL, anames = NULL, bnames = NULL) {
   if (is.null(alpha) == FALSE) {if ( alpha<=0 | alpha>=1 ) stop('alpha must be in (0,1)')}
   if ((nettype %in% c('directed','undirected')) == FALSE) stop("nettype must be either 'directed' or 'undirected' ")
+  if (nettype == 'directed' & is.null(blist)) stop("blist cannot be null when nettype == 'directed' (see manual)")
   # first case: igraph object
   if (class(network) == 'igraph') { 
     requireNamespace("igraph", quietly = TRUE)
@@ -64,14 +65,19 @@ pnea = function(alist, blist = NULL, network, nettype, nodes, alpha = NULL, anam
     }
     net = netfromadj(adjacency, nodes, nettype)
   }
-  # second case: adjacency matrix
-  else if (class(network) == "matrix" & ncol(network)>2 ) {
+  # second case A: adjacency matrix
+  else if (class(network) == "matrix" & ncol(network)>2) {
     if (isSymmetric(network)==TRUE & nettype == 'directed') {
       warning('The adjacency matrix is symmetric. Should you set nettype = "undirected"?')
     }
     if (isSymmetric(network)==FALSE & nettype == 'undirected') {
       warning('The adjacency matrix is not symmetric. Should you set nettype = "directed"?')
     }
+    net = netfromadj(network, nodes, nettype)
+  }
+  # second case B: sparse adjacency matrix (class "dgCMatrix")
+  else if (class(network) == "dgCMatrix") {
+    requireNamespace("Matrix", quietly = TRUE)
     net = netfromadj(network, nodes, nettype)
   }
   # third case: two-column matrix with labels
