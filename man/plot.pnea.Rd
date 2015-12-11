@@ -4,7 +4,7 @@
 Plot method of \code{pnea}
 }
 \description{
-Histogram and p-p plot of p-values for objects of class "\code{pnea}".
+\code{plot} method for class "\code{pnea}".
 }
 \usage{
 \method{plot}{pnea}(x, nbreaks = 10, ...)

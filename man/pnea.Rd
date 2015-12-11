@@ -9,11 +9,11 @@ pnea(alist, blist = NULL, network, nettype, nodes, alpha = NULL,
      anames = NULL, bnames = NULL)
 }
 \arguments{
-  \item{alist}{A list of A sets. Each element of the list is a gene set and must be represented as a vector of genes}
-  \item{blist}{A list of B sets. Each element of the list is a gene set and must be represented as a vector of genes. If \code{nettype} is \code{"undirected"}, this argument is optional: if provided, every set of \code{blist} is compared with every set of \code{alist}; if \code{NULL}, the function compares sets in \code{alist} between themselves}
-  \item{network}{One of the following objects: an adjacency matrix of class "matrix" (see 'Example 1') or of class ""dgCMatrix"", an \code{igraph} object (see 'Example 2') or a two-column matrix where every row represents and edge (for directed networks, elements in the first column must be parent nodes, and elements in the second column child nodes)}
+  \item{alist}{List of A sets. Each element within the list is a vector of genes and represents a gene set}
+  \item{blist}{List of B sets. Each element within the list is a vector of genes and represents a gene set. If \code{nettype == "undirected"}, this argument is optional: if provided, every set of \code{blist} is compared with every set of \code{alist}; if \code{NULL}, the function compares sets in \code{alist} between themselves}
+  \item{network}{One of the following objects: an adjacency matrix of class "matrix" (see 'Example 1') or a sparse adjacency matrix of class "dgCMatrix"; an \code{igraph} object (see 'Example 2'); a two-column matrix where every row represents and edge (for directed networks, parent nodes must be in the first column, and child nodes in the second)}
   \item{nettype}{Either \code{'directed'} or \code{'undirected'}}
-  \item{nodes}{Vector containing the names of all nodes in the network}
+  \item{nodes}{Vector containing the (ordered) names of all nodes in the network}
   \item{alpha}{Significance level of the test (optional). If specified, a column with the conclusion of the test is added to the output}
   \item{anames}{Vector of names for the elements of \code{alist} (optional: it has to be provided only if the elements of \code{alist} are not named)}
   \item{bnames}{Vector of names for the elements of \code{blist} (optional: it has to be provided only if the elements of \code{blist} are not named)}
@@ -27,7 +27,7 @@ pnea(alist, blist = NULL, network, nettype, nodes, alpha = NULL,
 \item{conclusion}{conclusion of the test (only if \code{alpha} is specified): no enrichment, overenrichment or underenrichment}
 }
 \author{Mirko Signorelli}
-\seealso{\code{\link{plot.pnea}}, \code{\link{print.pnea}}, \code{\link{summary.pnea}}}
+\seealso{\code{\link{networkmatrix}}, \code{\link{plot.pnea}},  \code{\link{print.pnea}}, \code{\link{summary.pnea}}}
 
 \examples{
 # Example 1: network given as adjacency matrix:
@@ -89,11 +89,13 @@ test = pnea(alist = esr, blist = yeast$goslimproc, network = yeast$yeastnet,
 
 test1 = test[1:99,]
 table(test1$conclusion)
+plot(test1)
 o1=test1[test1$conclusion=='Overenrichment',]
 print(o1, nrows='ALL') #display overenrichments
 
 test2 = test[100:198,]
 table(test2$conclusion)
+plot(test2)
 o2=test2[test2$conclusion=='Overenrichment',]
 print(o2, nrows='ALL') #display overenrichments
 }}

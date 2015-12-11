@@ -1,5 +1,5 @@
 export(pnea)
-export(netfromadj)
+export(networkmatrix)
 S3method(plot, pnea)
 S3method(print, pnea)
 S3method(summary, pnea)

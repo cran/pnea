@@ -4,7 +4,7 @@
 Summary method of \code{pnea}
 }
 \description{
-\code{summary} method for class "\code{pnea}"
+\code{summary} method for class "\code{pnea}".
 }
 \usage{
 \method{summary}{pnea}(object, ...)

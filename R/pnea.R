@@ -1,38 +1,31 @@
 ####### INTERNAL FUNCTIONS
-# Create network matrix from adjacency matrix and nodes list
-netfromadj = function(A, nodes, nettype) {
+networkmatrix = function(network, nodes, nettype) {
   if ((nettype %in% c('directed','undirected')) == FALSE) stop("nettype must be either 'directed' or 'undirected' ")
-  if (nettype == 'directed')  {
-    nedges = sum(A)
-    ngenes = length(nodes)
-    out = matrix(nrow=nedges, ncol=2)
-    k=1
-    for (i in 1:(ngenes) ) {
-      for (j in (1:ngenes)[-i] ) {
-        if (A[i,j]==1) {
-          out[k,1]=nodes[i]
-          out[k,2]=nodes[j]
-          k=k+1
-        }
-      }
-    }
+  requireNamespace("igraph", quietly = TRUE)
+  # adjacency matrix: first converted to igraph
+  if (class(network) == 'matrix' & nettype == 'directed') {
+    colnames(network) = nodes
+    network = igraph::graph.adjacency(network,"directed", diag=F)
   }
-  else if (nettype == 'undirected')  {
-    nedges = sum(A)/2
-    ngenes = length(nodes)
-    out = matrix(nrow=nedges, ncol=2)
-    k=1
-    for (i in 2:(ngenes) ) {
-      for (j in 1:(i-1) ) {
-        if (A[i,j]==1) {
-          out[k,1]=nodes[i]
-          out[k,2]=nodes[j]
-          k=k+1
-        }
-      }
-    }
+  if (class(network) == 'matrix' & nettype == 'undirected') {
+    colnames(network) = nodes
+    network = igraph::graph.adjacency(network,"undirected", diag=F)
   }
-  return(out)
+  # then, get edgelist from igraph
+  if (class(network)==c('igraph')) {
+    if (is.null(igraph::V(network)$name)) igraph::V(network)$name = nodes
+    output = igraph::get.edgelist(network, names = T)
+  }
+  else if (class(network) == "dgCMatrix") {
+    requireNamespace("Matrix", quietly = TRUE)
+    indexes = as.matrix(Matrix::summary(network))
+    output = matrix(nrow = dim(indexes)[1], ncol = 2)
+    v1 = sort(unique(indexes[,1]))
+    v2 = sort(unique(indexes[,2]))
+    output[,1] = as.character(factor(indexes[,1], labels=nodes[v1]))
+    output[,2] = as.character(factor(indexes[,2], labels=nodes[v2]))
+  }
+  return(output)
 }
 
 # compute pvalue
@@ -56,14 +49,7 @@ pnea = function(alist, blist = NULL, network, nettype, nodes, alpha = NULL, anam
   # first case: igraph object
   if (class(network) == 'igraph') { 
     requireNamespace("igraph", quietly = TRUE)
-    adjacency = as.matrix(igraph::get.adjacency(network))
-    if (isSymmetric(adjacency)==TRUE & nettype == 'directed') {
-      warning('The adjacency matrix is symmetric. Should you set nettype = "undirected"?')
-    }
-    else if (isSymmetric(adjacency)==FALSE & nettype == 'undirected') {
-      warning('The adjacency matrix is not symmetric. Should you set nettype = "directed"?')
-    }
-    net = netfromadj(adjacency, nodes, nettype)
+    net = networkmatrix(network, nodes, nettype)
   }
   # second case A: adjacency matrix
   else if (class(network) == "matrix" & ncol(network)>2) {
@@ -73,12 +59,12 @@ pnea = function(alist, blist = NULL, network, nettype, nodes, alpha = NULL, anam
     if (isSymmetric(network)==FALSE & nettype == 'undirected') {
       warning('The adjacency matrix is not symmetric. Should you set nettype = "directed"?')
     }
-    net = netfromadj(network, nodes, nettype)
+    net = networkmatrix(network, nodes, nettype)
   }
   # second case B: sparse adjacency matrix (class "dgCMatrix")
   else if (class(network) == "dgCMatrix") {
     requireNamespace("Matrix", quietly = TRUE)
-    net = netfromadj(network, nodes, nettype)
+    net = networkmatrix(network, nodes, nettype)
   }
   # third case: two-column matrix with labels
   else if (class(network) == "matrix" & ncol(network)==2) net=network 
