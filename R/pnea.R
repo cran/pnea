@@ -83,7 +83,10 @@ pnea = function(alist, blist = NULL, network, nettype, nodes, alpha = NULL, anam
     for (i in 1:length(alist)) {
       if (is.factor(alist[[i]]) == T) {alist[[i]] = as.character(alist[[i]])}
       eina[[i]] = (net[,1] %in% alist[[i]])|(net[,2] %in% alist[[i]])
-      netred[[i]] = net[eina[[i]],]
+      if (sum(eina[[i]]) == 1) netred[[i]] = as.matrix(t(net[eina[[i]],]))
+      else if (sum(eina[[i]]) == 0) stop(paste('There are no edges connected to genes in',
+                            names(alist)[i],'. The test cannot be computed.'))
+      else netred[[i]] = net[eina[[i]],]
       alogic[[i]] = (netred[[i]][,1] %in% alist[[i]])
       alogic2[[i]] = (netred[[i]][,2] %in% alist[[i]])
       oa[i] = sum(alogic[[i]])+sum(alogic2[[i]]) # total degree of A (undirected net!)
@@ -152,7 +155,10 @@ pnea = function(alist, blist = NULL, network, nettype, nodes, alpha = NULL, anam
       if (is.factor(alist[[i]]) == T) {alist[[i]] = as.character(alist[[i]])}
       alogic[[i]] = (net[,1] %in% alist[[i]])
       oa[i] = sum(alogic[[i]]) # outdegree of A
-      netred[[i]] = net[alogic[[i]],]
+      if ( sum(alogic[[i]]) ==1 ) netred[[i]] = as.matrix(t(net[alogic[[i]],]))
+      else if (sum(alogic[[i]]) == 0) stop(paste('There are no arrows going out from genes in',
+                           names(alist)[i]),'. The test cannot be computed.')
+      else netred[[i]] = net[alogic[[i]],]
     }
     # directed: only relevant case is each A vs B (blist provided!)
     if (is.null(blist) == FALSE) {
