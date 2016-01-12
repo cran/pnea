@@ -34,5 +34,22 @@ Gasch, A. P., Spellman, P. T., Kao, C. M., Carmel-Harel, O., Eisen, M. B., Storz
 
 Kim, H., Shin, J., Kim, E., Kim, H., Hwang, S., Shim, J. E., and Lee, I. (2013). Yeastnet v3: a public database of data-specific and integrated functional gene networks for saccharomyces cerevisiae. Nucleic Acids Res., pages 1-6.
 }
+\examples{
+\dontrun{
+data(yeast)
+esr = list('ESR 1' = yeast$esr1, 'ESR 2' = yeast$esr2)
+test = pnea(alist = esr, blist = yeast$goslimproc, network = yeast$yeastnet,
+            nettype = 'undirected', nodes = yeast$ynetgenes, alpha = 0.01)
+
+test1 = test[1:99,]
+o1=test1[test1$conclusion=='Overenrichment',]
+# list of overenrichments for the first ESR set:
+print(o1, nrows='ALL') 
+
+test2 = test[100:198,]
+o2=test2[test2$conclusion=='Overenrichment',]
+# list of overenrichments for the second ESR set:
+print(o2, nrows='ALL')
+}}
 \seealso{\code{\link{pnea}}}
 \keyword{datasets}
